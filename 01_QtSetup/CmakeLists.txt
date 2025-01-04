@@ -1,0 +1,120 @@
+# Minimum required CMake version
+cmake_minimum_required(VERSION 3.16)
+
+# Project name
+project(01_QtSetup LANGUAGES CXX)
+
+# Set the C++ standard to C++17
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Find the required Qt6 packages
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
+
+# Source files
+set(SOURCE_FILES
+    main.cpp
+)
+
+# Add the executable target
+add_executable(${PROJECT_NAME}
+    ${SOURCE_FILES}
+)
+
+# Link the Qt6 libraries to the executable
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Widgets
+)
+
+# Enable compiler warnings for better code quality (optional)
+if(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE /W4 /Zc:__cplusplus)
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
+endif()
+
+# Windows-specific configurations
+if(WIN32)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE OS_WINDOWS=1)
+endif()
+
+# Add Qt's autogen tools for MOC, UIC, and RCC if needed
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    AUTOMOC ON
+    AUTORCC ON
+    AUTOUIC ON
+)
+
+# Print helpful messages
+message(STATUS "C++ Standard: ${CMAKE_CXX_STANDARD}")
+message(STATUS "Qt Version: ${Qt6Core_VERSION}")
+
+
+
+
+
+
+
+#     old cmakelistes  
+
+# cmake_minimum_required(VERSION 3.31.3)
+
+# project ("01_QtSetup")
+
+# # list the header files
+# set(HEADER_FILES
+
+# )
+
+# # list the source files
+# set(SOURCE_FILES
+	# main.cpp
+# )
+
+# # link with qt
+# find_package(QtCore    CONFIG REQUIRED)
+# find_package(QtWidgets CONFIG REQUIRED)
+# find_package(QtGui     CONFIG REQUIRED)
+
+# qt_wrap_cpp(HEADER_MOC ${HEADER_FILES})
+
+# # add library target  
+# add_executable(01_QtSetup
+	# ${HEADER_FILES}
+	# ${SOURCE_FILES}
+	# ${HEADER_MOC}
+	# ${RCC_SOURCES}
+# )
+
+# set(QT_LIBS
+	# Qt::Core
+	# Qt::Gui
+	# Qt::Widgets
+# )
+
+# target_link_libraries(01_QtSetup
+	# PUBLIC
+		# ${QT_LIBS}
+# )
+
+# # Windows specfic flags to enable W variations of winapi
+# if(WIN32)
+	# target_compile_definitions(01_QtSetup
+		# PRIVATE
+			# OS_WINDOWS=1
+	# )
+	# target_compile_options(01_QtSetup
+		# PRIVATE
+			# /WX
+	# )
+# endif()
+
+# # enable C++19
+# # disable any compiler specifc extensions
+# target_compile_features(01_QtSetup PUBLIC cxx_std_19)
+# set_target_properties(01_QtSetup PROPERTIES
+	# CXX_EXTENSIONS OFF
+# )
